@@ -1,118 +1,253 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>App Penjualan</title>
-  <link rel="manifest" href="manifest.json" />
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      font-family: "Segoe UI", sans-serif;
-      box-sizing: border-box;
-    }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rekap Penjualan • Dashboard</title>
 
-    body {
-      background: #f4f6f9;
-      padding: 20px;
-    }
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    .header {
-      text-align: center;
-      margin-bottom: 25px;
-    }
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    .header h1 {
-      font-size: 26px;
-      font-weight: bold;
-      color: #333;
-    }
+  <!-- App CSS -->
+  <link rel="stylesheet" href="style.css">
 
-    .card {
-      background: #fff;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
-      margin-bottom: 20px;
-    }
+  <!-- PWA manifest (optional but recommended) -->
+  <link rel="manifest" href="manifest.json">
 
-    label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #333;
-      display: block;
-      margin-bottom: 6px;
-    }
-
-    input, select {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      font-size: 15px;
-      transition: 0.2s;
-    }
-
-    input:focus, select:focus {
-      border-color: #4a90e2;
-      outline: none;
-      box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
-    }
-
-    button {
-      width: 100%;
-      padding: 14px;
-      background: #4a90e2;
-      border: none;
-      color: white;
-      font-size: 18px;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      background: #3d7dcc;
-    }
-
-    .footer {
-      text-align: center;
-      margin-top: 40px;
-      color: #777;
-      font-size: 13px;
-    }
-  </style>
+  <meta name="theme-color" content="#0f1724" />
 </head>
 <body>
+  <div id="app" class="app">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="logo">RP</div>
+        <div class="brand-text">
+          <div class="title">RekapPenjualan</div>
+          <div class="subtitle">Personal SaaS</div>
+        </div>
+      </div>
 
-  <div class="header">
-    <h1>Input Penjualan</h1>
+      <nav class="nav">
+        <button class="nav-item active" data-view="overview">🏠 Overview</button>
+        <button class="nav-item" data-view="input">➕ Input</button>
+        <button class="nav-item" data-view="history">📜 Riwayat</button>
+        <button class="nav-item" data-view="products">📦 Produk</button>
+        <button class="nav-item" data-view="reports">📊 Laporan</button>
+        <button class="nav-item" data-view="settings">⚙️ Pengaturan</button>
+      </nav>
+
+      <div class="sidebar-foot">
+        <div class="user">
+          <div class="avatar">FA</div>
+          <div>
+            <div class="name">Fajar</div>
+            <div class="role">Owner</div>
+          </div>
+        </div>
+        <button id="collapseBtn" class="collapse">⤺</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="search-wrap">
+          <input id="globalSearch" type="search" placeholder="Cari produk, transaksi..." />
+          <button id="searchClear" class="icon-btn">✖</button>
+        </div>
+
+        <div class="top-actions">
+          <button id="darkToggle" class="icon-btn" title="Toggle theme">🌙</button>
+          <button id="notifBtn" class="icon-btn" title="Notifications">🔔 <span id="notifBadge" class="badge hidden">0</span></button>
+        </div>
+      </header>
+
+      <!-- VIEWS -->
+      <section class="view" id="view-overview" data-view="overview">
+        <div class="page-header">
+          <h1>Overview</h1>
+          <div class="page-actions">
+            <button id="exportCsvBtn" class="btn ghost">Export CSV</button>
+            <button id="quickAddBtn" class="btn primary">Quick Add</button>
+          </div>
+        </div>
+
+        <div class="grid-cards">
+          <div class="stat card">
+            <div class="stat-title">Total Pendapatan</div>
+            <div class="stat-value" id="stat-total">Rp 0</div>
+            <div class="stat-sub" id="stat-change">—</div>
+          </div>
+
+          <div class="stat card">
+            <div class="stat-title">Transaksi</div>
+            <div class="stat-value" id="stat-count">0</div>
+            <div class="stat-sub">Total record</div>
+          </div>
+
+          <div class="stat card">
+            <div class="stat-title">Rata-rata</div>
+            <div class="stat-value" id="stat-avg">Rp 0</div>
+            <div class="stat-sub">Per transaksi</div>
+          </div>
+
+          <div class="stat card">
+            <div class="stat-title">Produk Terlaris</div>
+            <div class="stat-value" id="stat-top">-</div>
+            <div class="stat-sub">Berdasarkan qty</div>
+          </div>
+        </div>
+
+        <div class="charts">
+          <div class="chart-card card">
+            <div class="chart-header"><h3>Penjualan Bulanan</h3></div>
+            <canvas id="salesChart" height="120"></canvas>
+          </div>
+
+          <div class="chart-card card">
+            <div class="chart-header"><h3>Top Produk</h3></div>
+            <canvas id="topChart" height="120"></canvas>
+          </div>
+        </div>
+      </section>
+
+      <!-- INPUT VIEW -->
+      <section class="view hidden" id="view-input" data-view="input">
+        <div class="page-header">
+          <h1>Input Penjualan</h1>
+        </div>
+
+        <div class="card form-card">
+          <form id="salesForm">
+            <div class="form-row">
+              <label>Produk</label>
+              <input id="fProduct" placeholder="Nama produk" required />
+            </div>
+            <div class="form-row two">
+              <div>
+                <label>Qty</label>
+                <input id="fQty" type="number" min="1" value="1" required />
+              </div>
+              <div>
+                <label>Harga Satuan (Rp)</label>
+                <input id="fPrice" type="number" min="0" value="0" required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <label>Tanggal</label>
+              <input id="fDate" type="date" />
+            </div>
+
+            <div class="form-row actions">
+              <button type="submit" class="btn primary">Simpan</button>
+              <button type="button" id="clearForm" class="btn ghost">Reset</button>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- HISTORY VIEW -->
+      <section class="view hidden" id="view-history" data-view="history">
+        <div class="page-header">
+          <h1>Riwayat Transaksi</h1>
+          <div class="page-actions">
+            <input id="filterDate" type="month" />
+            <select id="filterProduct"><option value="">Semua Produk</option></select>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table id="table">
+              <thead>
+                <tr>
+                  <th data-sort="date">Tanggal ▴▾</th>
+                  <th data-sort="product">Produk ▴▾</th>
+                  <th data-sort="qty">Qty ▴▾</th>
+                  <th data-sort="price">Harga</th>
+                  <th data-sort="total">Total ▴▾</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="table-footer">
+            <div class="pagination">
+              <button id="prevPage" class="icon-btn">◀</button>
+              <span id="pageInfo">1 / 1</span>
+              <button id="nextPage" class="icon-btn">▶</button>
+            </div>
+
+            <div class="rows-per-page">
+              <label>Rows</label>
+              <select id="rowsPerPage"><option>10</option><option>25</option><option>50</option></select>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PRODUCTS VIEW -->
+      <section class="view hidden" id="view-products" data-view="products">
+        <div class="page-header"><h1>Produk</h1></div>
+
+        <div class="card">
+          <div class="flex-between">
+            <div>
+              <h3>Daftar Produk</h3>
+              <p class="muted">Kelola daftar produk anda</p>
+            </div>
+            <div>
+              <input id="newProduct" placeholder="Nama produk baru" />
+              <button id="addProduct" class="btn primary">Tambah Produk</button>
+            </div>
+          </div>
+
+          <ul id="productList" class="product-list"></ul>
+        </div>
+      </section>
+
+      <!-- REPORTS VIEW -->
+      <section class="view hidden" id="view-reports" data-view="reports">
+        <div class="page-header"><h1>Laporan</h1></div>
+
+        <div class="card">
+          <h3>Laporan Ringkasan</h3>
+          <pre id="reportPre" class="muted">Report will be generated here</pre>
+          <button id="generateReport" class="btn primary">Generate Laporan</button>
+        </div>
+      </section>
+
+      <!-- SETTINGS VIEW -->
+      <section class="view hidden" id="view-settings" data-view="settings">
+        <div class="page-header"><h1>Pengaturan</h1></div>
+
+        <div class="card">
+          <label>Theme</label>
+          <select id="themeSelect">
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+
+          <label style="margin-top:12px">Auto Backup (local)</label>
+          <button id="backupBtn" class="btn ghost">Backup Sekarang</button>
+        </div>
+      </section>
+    </main>
   </div>
 
-  <div class="card">
-    <label>Nama Barang</label>
-    <input type="text" id="barang" placeholder="Contoh: Kopi Hitam" />
+  <!-- MODALS & TOAST -->
+  <div id="modalRoot"></div>
+  <div id="toastRoot" class="toast-root"></div>
 
-    <label>Jumlah Terjual</label>
-    <input type="number" id="jumlah" placeholder="Contoh: 5" />
-
-    <label>Harga Satuan</label>
-    <input type="number" id="harga" placeholder="Contoh: 15000" />
-
-    <button onclick="kirimData()">Simpan Penjualan</button>
-  </div>
-
-  <div class="footer">
-    © 2025 App Penjualan — PWA Version
-  </div>
-
-  <script>
-    function kirimData() {
-      alert("Data berhasil disimpan! (belum dikirim ke Google Sheet)");
-    }
-  </script>
-
+  <!-- App script -->
+  <script src="app.js" defer></script>
 </body>
 </html>
