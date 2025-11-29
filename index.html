@@ -1,75 +1,118 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#4CAF50" />
-  <meta charset="UTF-8">
-  <title>Rekap Penjualan</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>App Penjualan</title>
+  <link rel="manifest" href="manifest.json" />
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", sans-serif;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial;
-      max-width: 500px;
-      margin: auto;
+      background: #f4f6f9;
       padding: 20px;
     }
-    input {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
+
+    .header {
+      text-align: center;
+      margin-bottom: 25px;
     }
-    button {
-      padding: 10px;
-      width: 100%;
-      background: black;
-      color: white;
+
+    .header h1 {
+      font-size: 26px;
       font-weight: bold;
+      color: #333;
+    }
+
+    .card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.07);
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #333;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      margin-bottom: 15px;
+      font-size: 15px;
+      transition: 0.2s;
+    }
+
+    input:focus, select:focus {
+      border-color: #4a90e2;
+      outline: none;
+      box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      background: #4a90e2;
+      border: none;
+      color: white;
+      font-size: 18px;
+      border-radius: 12px;
       cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #3d7dcc;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #777;
+      font-size: 13px;
     }
   </style>
-  <link rel="manifest" href="manifest.json" />
-<meta name="theme-color" content="#4CAF50" />
 </head>
 <body>
 
-  <h2>Rekap Penjualan</h2>
+  <div class="header">
+    <h1>Input Penjualan</h1>
+  </div>
 
-  <input id="produk" placeholder="Nama Produk">
-  <input id="qty" type="number" placeholder="Qty">
-  <input id="harga" type="number" placeholder="Harga">
+  <div class="card">
+    <label>Nama Barang</label>
+    <input type="text" id="barang" placeholder="Contoh: Kopi Hitam" />
 
-  <button onclick="kirim()">Simpan</button>
+    <label>Jumlah Terjual</label>
+    <input type="number" id="jumlah" placeholder="Contoh: 5" />
 
-  <p id="status"></p>
+    <label>Harga Satuan</label>
+    <input type="number" id="harga" placeholder="Contoh: 15000" />
+
+    <button onclick="kirimData()">Simpan Penjualan</button>
+  </div>
+
+  <div class="footer">
+    © 2025 App Penjualan — PWA Version
+  </div>
 
   <script>
-    const URL = "https://script.google.com/macros/s/AKfycbz9dXdUOX2qHhdiYIdYSJDG7RwJsCRoldkbzuwTv0Czf1KgcZQ2hLUaaPyDNZpFyiOtKQ/exec";
-
-    function kirim() {
-      const data = {
-        produk: document.getElementById("produk").value,
-        qty: Number(document.getElementById("qty").value),
-        harga: Number(document.getElementById("harga").value)
-      };
-
-      fetch(URL, {
-        method: "POST",
-        body: JSON.stringify(data)
-      })
-      .then(() => {
-        document.getElementById("status").innerText = "Tersimpan!";
-        document.getElementById("produk").value = "";
-        document.getElementById("qty").value = "";
-        document.getElementById("harga").value = "";
-      })
-      .catch(() => {
-        document.getElementById("status").innerText = "Gagal, cek koneksi.";
-      });
+    function kirimData() {
+      alert("Data berhasil disimpan! (belum dikirim ke Google Sheet)");
     }
   </script>
-<script>
-  if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/service-worker.js");
-  }
-</script>
+
 </body>
 </html>
