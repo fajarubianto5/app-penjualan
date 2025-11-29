@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#4CAF50" />
+  <meta charset="UTF-8">
+  <title>Rekap Penjualan</title>
+  <style>
+    body {
+      font-family: Arial;
+      max-width: 500px;
+      margin: auto;
+      padding: 20px;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      background: black;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  </style>
+  <link rel="manifest" href="manifest.json" />
+<meta name="theme-color" content="#4CAF50" />
+</head>
+<body>
+
+  <h2>Rekap Penjualan</h2>
+
+  <input id="produk" placeholder="Nama Produk">
+  <input id="qty" type="number" placeholder="Qty">
+  <input id="harga" type="number" placeholder="Harga">
+
+  <button onclick="kirim()">Simpan</button>
+
+  <p id="status"></p>
+
+  <script>
+    const URL = "https://script.google.com/macros/s/AKfycbz9dXdUOX2qHhdiYIdYSJDG7RwJsCRoldkbzuwTv0Czf1KgcZQ2hLUaaPyDNZpFyiOtKQ/exec";
+
+    function kirim() {
+      const data = {
+        produk: document.getElementById("produk").value,
+        qty: Number(document.getElementById("qty").value),
+        harga: Number(document.getElementById("harga").value)
+      };
+
+      fetch(URL, {
+        method: "POST",
+        body: JSON.stringify(data)
+      })
+      .then(() => {
+        document.getElementById("status").innerText = "Tersimpan!";
+        document.getElementById("produk").value = "";
+        document.getElementById("qty").value = "";
+        document.getElementById("harga").value = "";
+      })
+      .catch(() => {
+        document.getElementById("status").innerText = "Gagal, cek koneksi.";
+      });
+    }
+  </script>
+<script>
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/service-worker.js");
+  }
+</script>
+</body>
+</html>
