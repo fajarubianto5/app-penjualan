@@ -1,10 +1,10 @@
 {
-  "name": "Aplikasi Penjualan",
-  "short_name": "Penjualan",
+  "name": "Rekap Penjualan",
+  "short_name": "Rekap",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#4CAF50",
+  "background_color": "#f5f7fb",
+  "theme_color": "#0f1724",
   "icons": [
     {
       "src": "icon-192.png",
