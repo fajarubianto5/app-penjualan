@@ -11,13 +11,85 @@
   <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-  <!-- App CSS -->
-  <link rel="stylesheet" href="style.css">
-
-  <!-- PWA manifest (optional but recommended) -->
+  <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
-
   <meta name="theme-color" content="#0f1724" />
+
+  <!-- Inline CSS (professional styles) -->
+  <style>
+    :root{
+      --accent:#2563eb; --muted:#94a3b8;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg,#f5f7fb 0%, #eef2f7 100%);
+      color:#0b1220;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .app{display:flex;min-height:100vh;max-width:1100px;margin:0 auto}
+    .sidebar{
+      width:260px;padding:18px 16px;background:#fff;border-right:1px solid #eef2f6;display:flex;flex-direction:column;gap:18px;
+      transition:width .22s ease;
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .logo{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#06b6d4);display:flex;align-items:center;justify-content:center;color:white;font-weight:700}
+    .brand-text .title{font-weight:700}
+    .brand-text .subtitle{font-size:12px;color:var(--muted)}
+    .nav{display:flex;flex-direction:column;gap:6px}
+    .nav-item{background:transparent;border:0;padding:10px 12px;text-align:left;border-radius:10px;cursor:pointer;font-weight:600;color:#1f2937}
+    .nav-item.active, .nav-item:hover{background:#f1f6ff;color:var(--accent)}
+    .sidebar-foot{margin-top:auto;display:flex;align-items:center;justify-content:space-between}
+    .main{flex:1;padding:18px;}
+    .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:12px}
+    .search-wrap{display:flex;align-items:center;gap:8px;background:#fff;padding:8px;border-radius:10px;box-shadow:0 4px 12px rgba(16,24,40,0.04)}
+    .search-wrap input{border:none;outline:none;padding:8px;width:320px}
+    .icon-btn{border:0;background:transparent;padding:8px;border-radius:8px;cursor:pointer}
+    .badge{background:#ef4444;color:white;padding:2px 6px;border-radius:999px;font-size:12px}
+    .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+    .page-header h1{margin:0;font-size:20px}
+    .page-actions{display:flex;gap:8px}
+    .grid-cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+    .card{background:white;border-radius:12px;padding:14px;box-shadow:0 6px 18px rgba(16,24,40,0.04)}
+    .stat-title{color:var(--muted);font-size:13px}
+    .stat-value{font-weight:800;font-size:18px;margin-top:8px}
+    .stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
+    .charts{display:flex;gap:14px}
+    .chart-card{flex:1;display:flex;flex-direction:column}
+    .chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+    .form-card .form-row{margin-bottom:10px}
+    .form-row label{display:block;color:var(--muted);font-size:13px;margin-bottom:6px}
+    .form-row input{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef8;background:transparent}
+    .two{display:flex;gap:10px}
+    .actions{display:flex;gap:8px;justify-content:flex-end}
+    .table-wrap{overflow:auto}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:12px;text-align:left;border-bottom:1px solid #f1f5f9;font-size:14px}
+    thead th{background:transparent;color:#374151;font-weight:700}
+    .table-footer{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+    .product-list{margin-top:12px;list-style:none;padding:0;display:flex;flex-direction:column;gap:8px}
+    .product-item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:8px;border:1px solid #eef2f6}
+    .muted{color:var(--muted);font-size:13px;}
+    .btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+    .btn.primary{background:var(--accent);color:white}
+    .btn.ghost{background:transparent;border:1px solid #e6eef8}
+    .icon-btn.small{padding:6px}
+    .hidden{display:none}
+    @media (max-width:880px){
+      .sidebar{display:none}
+      .app{flex-direction:column}
+      .charts{flex-direction:column}
+      .grid-cards{grid-template-columns:repeat(2,1fr)}
+      .search-wrap input{width:160px}
+    }
+    /* Toast */
+    .toast-root{position:fixed;right:18px;bottom:18px;z-index:9999}
+    .toast{background:#111;color:white;padding:10px 14px;border-radius:10px;margin-top:8px;opacity:0;transform:translateY(6px);transition:all .28s}
+    .toast.visible{opacity:1;transform:none}
+  </style>
 </head>
 <body>
   <div id="app" class="app">
